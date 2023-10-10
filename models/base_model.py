@@ -14,6 +14,7 @@ class BaseModel:
         if not kwargs:
             self.id = str(uuid4())
             self.created_at = datetime.now()
+            models.storage.new(self)
         else:
             self.id = kwargs.get('id', str(uuid4()))
             self.created_at = kwargs.get('created_at', datetime.now())
@@ -34,6 +35,7 @@ class BaseModel:
         """updates the public instance attribute update_at
         with the current datetime"""
         self.update_at = datetime.now()
+        models.storage.save()
 
     def to_dict(self):
         """returns a dictionary containing all key/values
