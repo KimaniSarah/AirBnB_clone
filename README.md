@@ -1,4 +1,4 @@
-<img src="https://static.dezeen.com/uploads/2014/07/Airbnb-rebrand-by-DesignStudio_dezeen_468_8.jpg"/>
+<img src="https://static.dezeen.com/uploads/2014/07/Airbnb-rebrand-by-DesignStudio_dezeen_468_8.jpg" width="500"/>
 <h1 align="center">AIRBNB CONSOLE PROJECT</h1>
 <hr>
 
