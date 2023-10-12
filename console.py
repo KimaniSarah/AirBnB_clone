@@ -17,6 +17,7 @@ def parse(arg):
     """split argument"""
     return arg.split()
 
+
 class HBNBCommand(cmd.Cmd):
     """class definition"""
     prompt = "(hbnb)"
@@ -29,12 +30,15 @@ class HBNBCommand(cmd.Cmd):
             "Place",
             "Review"
             }
+
     def default(self, arg):
         """Default behavior for cmd module when input is invalid"""
         argdict = {
             "all": self.do_all,
             "destroy": self.do_destroy,
-            "update": self.do_update
+            "update": self.do_update,
+            "count": self.do_count,
+            "show": self.do_show
         }
         match = re.search(r"\.", arg)
         if match is not None:
@@ -76,22 +80,29 @@ class HBNBCommand(cmd.Cmd):
             storage.save()
 
     def do_show(self, arg):
-        """
-        Prints the string representation of an instance
+        """Prints the string representation of an instance
         based on the class name and id
         """
-        line = parse(arg)
-        od = storage.all()
-        if len(line) == 0:
-            print("** class name missing **")
-        elif line[0] not in self.__classes:
+        arguments = parse(arg)
+        """Get all instances from the storage"""
+        all_instances = storage.all()
+        """Check if the class name and instance ID are provided"""
+        if len(arguments) < 2:
+            return
+        class_name = arguments[0]
+        instance_id = arguments[1]
+        """Check if the provided class name is valid"""
+        if class_name not in self.__classes:
             print("** class doesn't exist **")
-        elif len(line) == 1:
-            print("** instance id missing **")
-        elif "{}.{}".format(line[0], line[1]) not in od:
+            return
+        """Check if the instance with the given class name and ID exists"""
+        instance_key = "{}.{}".format(class_name, instance_id)
+        if instance_key not in all_instances:
             print("** no instance found **")
-        else:
-            print(od["{}.{}".format(line[0], line[1])])
+            return
+
+        instance = all_instances[instance_key]
+        print(instance)
 
     def do_all(self, arg):
         """Usage: all or all <class> or <class>.all()
@@ -100,6 +111,7 @@ class HBNBCommand(cmd.Cmd):
         line = parse(arg)
         if len(line) > 0 and line[0] not in self.__classes:
             print("** class doesn't exist **")
+            """checks if the class given is present"""
         else:
             instance = []
             for obj in storage.all().values():
@@ -109,6 +121,23 @@ class HBNBCommand(cmd.Cmd):
                     instance.append(obj.__str__())
 
             print(instance)
+
+    def do_count(self, arg):
+        """ retrieve all instances of a class"""
+        line = parse(arg)
+        if len(line) == 0:
+            print("** class name missing **")
+        elif len(line) > 0 and line[0] not in self.__classes:
+            print("** class doesn't exist **")
+        else:
+            count = 0
+            for obj in storage.all():
+                if len(line) > 0 and line[0] == obj.__class__.__name__:
+                    count +=1
+                    """checks if the current obj in the loop is the
+                    provided class then it adds it to ount"""
+            print(count)
+
 
     def do_destroy(self, arg):
         """
@@ -165,7 +194,7 @@ class HBNBCommand(cmd.Cmd):
         elif isinstance(eval(line[2]), dict):
             obj = od["{}.{}".format(line[0], line[1])]
             for w, z in eval(line[2]).items():
-                if (w in obj.__class.__dict__.keys() and\
+                if (w in obj.__class.__dict__.keys() and
                         type(obj.__class.__dict__[w]) in {str, int, float}):
                     vlt = type(obj.__class.__dict__[w])
                     obj.__dict__[w] = vlt(z)
@@ -176,4 +205,3 @@ class HBNBCommand(cmd.Cmd):
 
 if __name__ == '__main__':
     HBNBCommand().cmdloop()
-
