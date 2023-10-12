@@ -10,12 +10,17 @@ from models.base_model import BaseModel
 class test_BaseModel(unittest.TestCase):
     def test_init_no_args(self):
         obj = BaseModel()
+        obj2 = BaseModel(id='45', name='spongebob')
+        """to test for the creation of a new instance
+        (not from a dictionary representation)"""
         self.assertIsInstance(obj.id, str)
         """check if the id is a string"""
         self.assertIsInstance(obj.created_at, datetime)
         """check if the created_at is a datetime"""
         self.assertIsInstance(obj.updated_at, datetime)
         """check if the updated_at is a datetime"""
+        self.assertEqual(obj2.id, "45")
+        self.assertEqual(obj2.name, "spongebob")
 
     def test_init_with_kwargs(self):
         example_created_at = '2017-09-28T21:03:54.052302'
