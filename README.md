@@ -10,7 +10,7 @@
 <h2>Command Interpreter</h2>
 <p>The command interpreter, often referred to as the "Airbnb Console," is a text-based interface for interacting with the Airbnb Console Project. It allows users to input various commands to perform actions like creating and managing property listings, users, and more</p>
 <hr>
-<h2>Usage<h2>
+<h2>Usage</h2>
 <p>In order to gain access to the AirBnb Clone, enter these commands in your terminal:</p>
 <ol>
 <li> git clone https://github.com/KimaniSarah/AirBnB_clone.git </li>
