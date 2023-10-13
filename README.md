@@ -18,8 +18,8 @@
 <li> ./console.py </li>
 </ol>
 <br>
-<p>For help, run the command <strong>help</strong> on your terminal</p>
-<p>To quit, run the command <strong>quit</strong> on your terminal</p>
+<p>For Help, run the command help on your terminal</p>
+<p>To Quit, run the command quit on your terminal</p>
 <hr>
 <h2>Contact Us</h2>
-<p>Email: <maryanemwende333@gmail.com> or <bibokimani@gmail.com></p>
+<p>Email: maryanemwende333@gmail.com or bibokimani@gmail.com</p>
