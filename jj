@@ -1,7 +1,6 @@
 #!/usr/bin/python3
 """contains the entry point of the command interpreter"""
 
-import json
 import re
 import cmd
 from models import storage
@@ -31,49 +30,27 @@ class HBNBCommand(cmd.Cmd):
             "Place",
             "Review"
             }
-    def default(self, line):
+
+    def default(self, arg):
+        """Default behavior for cmd module when input is invalid"""
         argdict = {
             "all": self.do_all,
-            "count": self.do_count,
-            "show": self.do_show,
             "destroy": self.do_destroy,
-            "update": self.do_update
+            "update": self.do_update,
+            "count": self.do_count,
+            "show": self.do_show
         }
-        parts = line.strip().split('(')
-    
-        if len(parts) == 2:
-            class_method_part, args_part = parts[0], parts[1][:-1]
-            class_name, method_name = class_method_part.split('.')
-            args = args_part.split(', ')
-        
-            if method_name in argdict:
-                if method_name == 'update':
-                    if args[1].startswith('"'):
-                        args_str = ' '.join(args)
-                        args_list = [arg.strip(',"') for arg in args_str.split(' ') if arg != args_str[-1]]
-                        id_now = args_list[0]
-                        attr = args_list[1]
-                        value = args_list[2]
-                        test = argdict[method_name](f"{class_name} {id_now} {attr} {value}")
-                    else:
-                        arg1 = ','.join(args)
-                        arg1_split = arg1.split('{')
-                        id_now = arg1_split[0]
-                        id_1 = id_now.strip('" ')
-                        id_0 = id_1.replace('"', '', 1)
-                        id_2 = id_0.replace(',', '', 1)
-                        dictionary_str = '{' + arg1_split[1]
-                        dictionary = eval(dictionary_str)
-                        for key, value in dictionary.items():
-                            value_1 = str(value)
-                            argdict[method_name](f"{class_name} {id_2} {key} {value_1}")
-                else:
-                    arg1 = args[0].strip('"')
-                    argdict[method_name](f"{class_name} {arg1}")
-            else:
-                print(f"Unknown method: {method_name} for class {class_name}")
-        else:
-            print("Unknown syntax:", line)
+        match = re.search(r"\.", arg)
+        if match is not None:
+            argl = [arg[:match.span()[0]], arg[match.span()[1]:]]
+            match = re.search(r"\((.*?)\)", argl[1])
+            if match is not None:
+                command = [argl[1][:match.span()[0]], match.group()[1:-1]]
+                if command[0] in argdict.keys():
+                    call = "{} {}".format(argl[0], command[1])
+                    return argdict[command[0]](call)
+        print("*** Unknown syntax: {}".format(arg))
+        return False
 
     def do_quit(self, arg):
         """to exit the program"""
@@ -122,7 +99,6 @@ class HBNBCommand(cmd.Cmd):
         instance_key = "{}.{}".format(class_name, instance_id)
         if instance_key not in all_instances:
             print("** no instance found **")
-            print("{}.{}".format(class_name, instance_id))
             return
 
         instance = all_instances[instance_key]
@@ -167,25 +143,20 @@ class HBNBCommand(cmd.Cmd):
         """
         Deletes an instance based on the class name and id
         """
+
         line = parse(arg)
         od = storage.all()
-
         if len(line) == 0:
             print("** class name missing **")
+        elif line[0] not in self.__classes:
+            print("** class doesn't exist **")
         elif len(line) == 1:
             print("** instance id missing **")
+        elif "{}.{}".format(line[0], line[1]) not in od.keys():
+            print("** no instance found **")
         else:
-            class_name = line[0].split('(')[0]
-        if class_name not in self.__classes:
-            print("** class doesn't exist **")
-        else:
-            instance_id = line[1]
-            instance_key = "{}.{}".format(class_name, instance_id)
-            if instance_key not in od:
-                print("** no instance found **")
-            else:
-                del od[instance_key]
-                storage.save()
+            del od["{}.{}".format(line[0], line[1])]
+            storage.save()
 
     def do_update(self, arg):
         """
