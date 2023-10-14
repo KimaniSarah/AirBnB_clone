@@ -121,7 +121,6 @@ class HBNBCommand(cmd.Cmd):
         instance_key = "{}.{}".format(class_name, instance_id)
         if instance_key not in all_instances:
             print("** no instance found **")
-            print("{}.{}".format(class_name, instance_id))
             return
 
         instance = all_instances[instance_key]
