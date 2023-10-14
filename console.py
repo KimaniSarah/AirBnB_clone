@@ -71,7 +71,7 @@ class HBNBCommand(cmd.Cmd):
                     arg1 = args[0].strip('"')
                     argdict[method_name](f"{class_name} {arg1}")
             else:
-                print(f"Unknown method: {method_name} for class {class_name}")
+                print("** class doesn't exist **")
         else:
             print("Unknown syntax:", line)
 
