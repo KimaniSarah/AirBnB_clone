@@ -31,6 +31,7 @@ class HBNBCommand(cmd.Cmd):
             "Place",
             "Review"
             }
+
     def default(self, line):
         argdict = {
             "all": self.do_all,
@@ -40,33 +41,31 @@ class HBNBCommand(cmd.Cmd):
             "update": self.do_update
         }
         parts = line.strip().split('(')
-    
         if len(parts) == 2:
             class_method_part, args_part = parts[0], parts[1][:-1]
             class_name, method_name = class_method_part.split('.')
             args = args_part.split(', ')
-        
             if method_name in argdict:
                 if method_name == 'update':
                     if args[1].startswith('"'):
-                        args_str = ' '.join(args)
-                        args_list = [arg.strip(',"') for arg in args_str.split(' ') if arg != args_str[-1]]
+                        a = ' '.join(args)
+                        args_list = [arg.strip(',"') for arg in a.split(' ')]
                         id_now = args_list[0]
-                        attr = args_list[1]
-                        value = args_list[2]
-                        test = argdict[method_name](f"{class_name} {id_now} {attr} {value}")
+                        a = args_list[1]
+                        v = args_list[2]
+                        argdict[method_name](f"{class_name} {id_now} {a} {v}")
                     else:
                         arg1 = ','.join(args)
                         arg1_split = arg1.split('{')
                         id_now = arg1_split[0]
                         id_1 = id_now.strip('" ')
                         id_0 = id_1.replace('"', '', 1)
-                        id_2 = id_0.replace(',', '', 1)
+                        i = id_0.replace(',', '', 1)
                         dictionary_str = '{' + arg1_split[1]
                         dictionary = eval(dictionary_str)
                         for key, value in dictionary.items():
-                            value_1 = str(value)
-                            argdict[method_name](f"{class_name} {id_2} {key} {value_1}")
+                            v = str(value)
+                            argdict[method_name](f"{class_name} {i} {key} {v}")
                 else:
                     arg1 = args[0].strip('"')
                     argdict[method_name](f"{class_name} {arg1}")
@@ -157,11 +156,10 @@ class HBNBCommand(cmd.Cmd):
             count = 0
             for obj in storage.all():
                 if len(line) > 0 and line[0] == obj.__class__.__name__:
-                    count +=1
+                    count += 1
                     """checks if the current obj in the loop is the
                     provided class then it adds it to ount"""
             print(count)
-
 
     def do_destroy(self, arg):
         """
