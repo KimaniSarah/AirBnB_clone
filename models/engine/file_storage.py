@@ -42,7 +42,8 @@ class FileStorage:
 
     def reload(self):
         """
-        deserializes the JSON file to __objects if the JSON file (__file_path) exists
+        deserializes the JSON file to __objects
+        if the JSON file (__file_path) exists
         """
 
         classes = {"BaseModel": BaseModel,
