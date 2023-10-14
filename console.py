@@ -146,19 +146,19 @@ class HBNBCommand(cmd.Cmd):
             print(instance)
 
     def do_count(self, arg):
-        """ retrieve all instances of a class"""
-        line = parse(arg)
-        if len(line) == 0:
+        """Retrieve all instances of a class and count them."""
+        if not arg:
             print("** class name missing **")
-        elif len(line) > 0 and line[0] not in self.__classes:
+        else:
+            line = parse(arg)
+            class_name = line[0]
+        if class_name not in self.__classes:
             print("** class doesn't exist **")
         else:
             count = 0
-            for obj in storage.all():
-                if len(line) > 0 and line[0] == obj.__class__.__name__:
+            for obj in storage.all().values():
+                if class_name == obj.__class__.__name__:
                     count += 1
-                    """checks if the current obj in the loop is the
-                    provided class then it adds it to ount"""
             print(count)
 
     def do_destroy(self, arg):
