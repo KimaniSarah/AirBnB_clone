@@ -6,6 +6,7 @@ from models.base_model import BaseModel
 
 
 class Amenity(BaseModel):
-    """Public class attributes"""
-
+    """
+    Public class attributes
+    """
     name = ""
